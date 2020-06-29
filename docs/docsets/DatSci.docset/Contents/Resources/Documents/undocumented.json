@@ -1,0 +1,159 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Array+Equatable.swift",
+      "line": 5,
+      "symbol": "Array.!=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Array+Equatable.swift",
+      "line": 8,
+      "symbol": "Array.==(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Array+anyType.swift",
+      "line": 5,
+      "symbol": "Array.typeAny",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Array+anyType.swift",
+      "line": 22,
+      "symbol": "Array.unique()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Array+anyType.swift",
+      "line": 31,
+      "symbol": "Array.containsSame(as:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/DataFrame/DataFrame+Methods.swift",
+      "line": 27,
+      "symbol": "DataFrame.addColumn(column:value:position:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/DataFrame/DataFrame+Methods.swift",
+      "line": 49,
+      "symbol": "DataFrame.delete(row:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/DataFrame/DataFrame+Methods.swift",
+      "line": 61,
+      "symbol": "DataFrame.addIndex()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/DataFrame/DataFrame+Methods.swift",
+      "line": 81,
+      "symbol": "DataFrame.max()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/DataFrame/DataFrame+Methods.swift",
+      "line": 85,
+      "symbol": "DataFrame.min()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/DataFrame/DataFrame+Methods.swift",
+      "line": 89,
+      "symbol": "DataFrame.addPrefix()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/DataFrame/df.swift",
+      "line": 3,
+      "symbol": "readJson",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Maths.swift",
+      "line": 1,
+      "symbol": "Maths",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Maths.swift",
+      "line": 2,
+      "symbol": "Maths.x",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Maths.swift",
+      "line": 3,
+      "symbol": "Maths.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Matrix+MathFunctions.swift",
+      "line": 2,
+      "symbol": "Matrix.*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Matrix.swift",
+      "line": 1,
+      "symbol": "Matrix",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Matrix.swift",
+      "line": 6,
+      "symbol": "Matrix",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Matrix.swift",
+      "line": 60,
+      "symbol": "array1DToMat(_:rows:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/Matrix.swift",
+      "line": 71,
+      "symbol": "arrayToMat(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/datSci.swift",
+      "line": 3,
+      "symbol": "datSci",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci/Sources/DatSci/datSci.swift",
+      "line": 5,
+      "symbol": "datSci.jsonToDataFrame(data:model:path:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/alexanderoldroyd/Documents/Programming/Swift/Packages/DatSci"
+}
