@@ -20,46 +20,81 @@ import SwiftKuery
 import SwiftKueryPostgreSQL
 
 public extension DataFrame {
+  
+  enum PathType {
+    case file
+    case url
+  }
+  
   /// Convert a JSON to a DataFrame as specified by the Codable struct.
   /// - Parameters:
   ///   - data: JSON data
   ///   - model: The model in which the JSON follows
   ///   - path: The path of the .json file
   /// - Returns: A DataFrame is produced from the JSON
-  static func jsonToDataFrame<T,V>(data: Foundation.Data,
+  static func jsonToDataFrame<T,V>(_ jsonPath: URL, pathType: PathType,
                                    model: T.Type,
-                                   path: KeyPath<T,V> ) -> DataFrame  where T: Codable {
-    var newDataFrame: DataFrame = [:]
-    do{
-      let decoder = JSONDecoder()
-      let json = try decoder.decode(model, from: data)
-      let jsonData = json[keyPath:path]
-      let structMirror = Mirror(reflecting: jsonData)
-      for struc in structMirror.children{
-        let childMirror = Mirror(reflecting: struc.value)
-        print(childMirror.children)
-        for child in childMirror.children{
-          guard newDataFrame.data[child.label!] != nil else{
-            //TODO: Rewrite as its own function
-            newDataFrame.data[child.label!] = [child.value]
-            newDataFrame.columns.append(Column(title: child.label!, dataType: type(of:child.value)))
-            continue
-          }
-
-          guard newDataFrame.columns[newDataFrame.columns.firstIndex(where: ({$0.title == child.label!}))!].dataType == type(of:child.value) else {
-            fatalError("Data types do not match")
-          }
-          newDataFrame.data[child.label!]!.append(child.value)
-          
-        }
-        newDataFrame.totalRows += 1
+                                   keypath: KeyPath<T,V> ) -> DataFrame  where T: Codable {
+    var foundationData: Foundation.Data?
+    
+    let waitSemaphore = DispatchSemaphore(value: 0)
+    
+    switch(pathType) {
+    case .file:
+      do {
+        foundationData = try Data(contentsOf: jsonPath)
+      } catch {
+        print("File cannot be correctly read")
       }
-    } catch{
-      print("Error with Conversion")
+    case .url:
+      URLSession.shared.dataTask(with: jsonPath) { data, response, error in
+        if let data = data {
+          foundationData = data
+          waitSemaphore.signal()
+        }
+      }.resume()
+      waitSemaphore.wait()
+    }
+    
+
+
+    var newDataFrame: DataFrame = [:]
+    if let foundationData = foundationData {
+      do{
+        let decoder = JSONDecoder()
+        let json = try decoder.decode(model, from: foundationData)
+        let jsonData = json[keyPath:keypath]
+        let structMirror = Mirror(reflecting: jsonData)
+        for struc in structMirror.children{
+          let childMirror = Mirror(reflecting: struc.value)
+          for child in childMirror.children{
+            guard newDataFrame.data[child.label!] != nil else{
+              //TODO: Rewrite as its own function
+              newDataFrame.data[child.label!] = [child.value]
+              newDataFrame.columns.append(Column(title: child.label!, dataType: type(of:child.value)))
+              continue
+            }
+
+            guard newDataFrame.columns[newDataFrame.columns.firstIndex(where: ({$0.title == child.label!}))!].dataType == type(of:child.value) else {
+              fatalError("Data types do not match")
+            }
+            newDataFrame.data[child.label!]!.append(child.value)
+            
+          }
+          newDataFrame.totalRows += 1
+        }
+      } catch{
+        print("Error with Conversion")
+      }
+      // TODO: Make function throw
+    } else {
+      fatalError("No Data")
     }
     newDataFrame.addIndex()
     return newDataFrame
   }
+  
+
   
   
   /// Convert a CSV to a DataFrame
@@ -80,7 +115,6 @@ public extension DataFrame {
     newDataFrame.columns = parse.headers!.map{Column(title: $0, dataType: String.self)}
     newDataFrame.totalRows = parse.row
     newDataFrame.data = parse.value
-    
     return newDataFrame
   }
   
@@ -133,6 +167,7 @@ public extension DataFrame {
       newDataFrame.columns.append(Column(title: "\(m)", dataType: Double.self))
     }
     newDataFrame.totalRows = matrix.dimensions.rows
+    newDataFrame.addIndex()
     
     return newDataFrame
   }
