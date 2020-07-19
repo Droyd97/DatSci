@@ -106,6 +106,7 @@ public struct DataFrame: ExpressibleByDictionaryLiteral, CustomStringConvertible
     }
   }
   
+  //TODO: Have an ability to SLICE with index rather then create new DataFrame
   subscript(rowRange: ClosedRange<Int>, columnRange: ClosedRange<Int>) -> DataFrame {
     get {
       var newDataFrame: DataFrame = [:]
@@ -113,6 +114,9 @@ public struct DataFrame: ExpressibleByDictionaryLiteral, CustomStringConvertible
       newDataFrame.columns.append(Column(title:"index", dataType: Int.self))
       newDataFrame.data["index"] = Array(0...newDataFrame.totalRows - 1)
       for head in columns[columnRange] {
+        guard head.title != "index" else {
+          continue
+        }
         newDataFrame.columns.append(head)
         newDataFrame.data[head.title] = Array(data[head.title]![rowRange])
       }

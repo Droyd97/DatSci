@@ -30,21 +30,58 @@ class dFConversionTests: XCTestCase {
     super.tearDown()
   }
 
-  func testJsonToDataFrame() throws {
-    //Given
-    let jsonData = jsonString.data(using: .utf8)!
+  func testJsonToDataFrameCase1() throws {
+    let bundle = Bundle(for: type(of: self))
+    let path = bundle.url(forResource: "jsonConverterTestFile", withExtension: "json")!
     let testPath = \TestDataStruct.data
     let expected: DataFrame = ["name" : ["James" , "Oliver" , "Simon"] ,
                                "age" : [19 , 25, 56] ,
                                "nationality" : ["British","American","British"],
                                "yearUpdate" : [2019 , 2019 , 2020]]
-    
+
     //When
-    let actual = DataFrame.jsonToDataFrame(data: jsonData,
-                                          model: TestDataStruct.self,
-                                          path: testPath)
+    let actual: DataFrame = DataFrame.jsonToDataFrame(path,
+                                                      pathType: .file,
+                                                      model: TestDataStruct.self,
+                                                      keypath: testPath)
     //Then
     XCTAssertTrue(expected == actual)
+  }
+  
+//  func testConverter() throws {
+//    let waitSemaphore = DispatchSemaphore(value: 0)
+//    URLSession.shared.dataTask(with: URL(string: "https://finnhub.io/api/v1/stock/symbol?exchange=US&token=bpi12g7rh5rbgl0l7kcg")!) { data, response, error in
+//      if let datas = data {
+//        do {
+//          let decoder = JSONDecoder()
+//          let json = try decoder.decode([Symbols].self, from: datas)
+//          print(json)
+//          waitSemaphore.signal()
+//        } catch {
+//          print("Error")
+//          waitSemaphore.signal()
+//        }
+//      } else {
+//        print("No data")
+//        waitSemaphore.signal()
+//      }
+//    }.resume()
+//    waitSemaphore.wait()
+//  }
+  
+  func testJsonToDataFrameCase2() throws {
+    //Given
+    let jsonData = jsonString.data(using: .utf8)!
+    let testPath = \TestDataStruct.data
+    let expected: DataFrame = ["currency" : ["USD" , "USD" , "USD"] ,
+                               "description" : ["AGILENT TECHNOLOGIES INC" , "ALCOA CORP", "PERTH MINT PHYSICAL GOLD ETF"] ,
+                               "displaySymbol" : ["A","AA","AAAU"],
+                               "symbol" : ["A" , "AA" , "AAAU"], "type":["EQS","EQS","ETF"]]
+    
+    //When
+    let actual: DataFrame = DataFrame.jsonToDataFrame(URL(string: "https://finnhub.io/api/v1/stock/symbol?exchange=US&token=bpi12g7rh5rbgl0l7kcg")!, pathType: .url, model: [Symbols].self, keypath: \[Symbols].self)
+    //Then
+    XCTAssertTrue(expected == actual[0...2,0...5])
   }
   
   func testCSVToDataFrame() throws {
@@ -87,6 +124,7 @@ class dFConversionTests: XCTestCase {
     }
   }
   
+  //TODO: Finish up Test
   func testRawQueryOutput() throws {
     let bundle = Bundle(for: type(of: self))
     let path = bundle.url(forResource: "PostgreSQLCredentials", withExtension: "json")!
@@ -105,13 +143,14 @@ class dFConversionTests: XCTestCase {
     }
   }
   
-  func testDatToDF() throws {
+  func testMatToDF() throws {
     //Given
     let matrix: Matrix = [[5,4,3],[2,6,7],[5,8,9]]
+    let expectedDataFrame: DataFrame = ["0": [5.0,2.0,5.0], "1": [4.0,6.0,8.0], "2": [3.0,7.0,9.0]]
     //When
     let actualDataFrame = DataFrame.matToDF(matrix)
     //Then
-    print(actualDataFrame)
+    XCTAssert(actualDataFrame == expectedDataFrame)
   }
   
   func testPerformanceCSVToDataFrame() throws {
@@ -161,6 +200,20 @@ private struct Details: Codable{
   let age: Int
   let nationality: String
   let yearUpdate: Int
+}
+
+
+
+private struct Finnhub: Codable {
+  let data: [Symbols]
+}
+
+private struct Symbols: Codable {
+  let currency: String
+  let description: String
+  let displaySymbol: String
+  let symbol: String
+  let type: String
 }
 
 private struct PostgreSQLCredentials: Codable {
