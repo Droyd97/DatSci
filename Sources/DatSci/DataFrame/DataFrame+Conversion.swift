@@ -24,6 +24,12 @@ public extension DataFrame {
   enum PathType {
     case file
     case url
+
+  }
+  
+  enum Nesting {
+    case dictionary
+    case array
   }
   
   /// Convert a JSON to a DataFrame as specified by the Codable struct.
@@ -34,7 +40,7 @@ public extension DataFrame {
   /// - Returns: A DataFrame is produced from the JSON
   static func jsonToDataFrame<T,V>(_ jsonPath: URL, pathType: PathType,
                                    model: T.Type,
-                                   keypath: KeyPath<T,V> ) -> DataFrame  where T: Codable {
+                                   keypath: KeyPath<T,V>, nesting: Nesting = .array ) -> DataFrame  where T: Codable {
     var foundationData: Foundation.Data?
     
     let waitSemaphore = DispatchSemaphore(value: 0)
@@ -55,9 +61,8 @@ public extension DataFrame {
       }.resume()
       waitSemaphore.wait()
     }
+  
     
-
-
     var newDataFrame: DataFrame = [:]
     if let foundationData = foundationData {
       do{
@@ -65,23 +70,59 @@ public extension DataFrame {
         let json = try decoder.decode(model, from: foundationData)
         let jsonData = json[keyPath:keypath]
         let structMirror = Mirror(reflecting: jsonData)
-        for struc in structMirror.children{
-          let childMirror = Mirror(reflecting: struc.value)
-          for child in childMirror.children{
-            guard newDataFrame.data[child.label!] != nil else{
-              //TODO: Rewrite as its own function
-              newDataFrame.data[child.label!] = [child.value]
-              newDataFrame.columns.append(Column(title: child.label!, dataType: type(of:child.value)))
-              continue
+        switch nesting {
+        case .array:
+          for struc in structMirror.children {
+            let childMirror = Mirror(reflecting: struc.value)
+            for child in childMirror.children {
+              guard newDataFrame.data[child.label!] != nil else{
+                //TODO: Rewrite as its own function
+                newDataFrame.data[child.label!] = [child.value]
+                newDataFrame.columns.append(Column(title: child.label!, dataType: type(of:child.value)))
+                continue
+              }
+              guard newDataFrame.columns[newDataFrame.columns.firstIndex(where: ({$0.title == child.label!}))!].dataType == type(of: child.value) else {
+                fatalError("Data types do not match")
+              }
+              newDataFrame.data[child.label!]!.append(child.value)
+              
             }
-
-            guard newDataFrame.columns[newDataFrame.columns.firstIndex(where: ({$0.title == child.label!}))!].dataType == type(of:child.value) else {
-              fatalError("Data types do not match")
-            }
-            newDataFrame.data[child.label!]!.append(child.value)
-            
+            newDataFrame.totalRows += 1
           }
-          newDataFrame.totalRows += 1
+        case .dictionary:
+          for struc in structMirror.children {
+            let childMirror = Mirror(reflecting: struc.value)
+            var i = 0
+            for (x, child) in childMirror.children {
+              if i == 0 {
+                //TODO: FINISH this off
+                if newDataFrame.data[x!] == nil {
+                  newDataFrame.data[x!] = [child]
+                  newDataFrame.columns.append(Column(title: x!, dataType: type(of: child)))
+                } else {
+                guard newDataFrame.columns[newDataFrame.columns.firstIndex(where: ({$0.title == x!}))!].dataType == type(of: child) else {
+                  fatalError("Data types do not match")
+                }
+                newDataFrame.data[x!]!.append(child)
+                }
+                i += 1
+              } else if i == 1 {
+                let childMirror2 = Mirror(reflecting: child)
+                for y in childMirror2.children {
+                  guard newDataFrame.data[y.label!] != nil else {
+                    newDataFrame.data[y.label!] = [y.value]
+                    newDataFrame.columns.append(Column(title: y.label!, dataType: type(of: y.value)))
+                    continue
+                  }
+                  guard newDataFrame.columns[newDataFrame.columns.firstIndex(where: ({$0.title == y.label!}))!].dataType == type(of: y.value) else {
+                    fatalError("Data types do not match")
+                  }
+                  newDataFrame.data[y.label!]!.append(y.value)
+                }
+              }
+            }
+            newDataFrame.totalRows += 1
+          }
         }
       } catch{
         print("Error with Conversion")

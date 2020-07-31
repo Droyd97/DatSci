@@ -84,6 +84,24 @@ class dFConversionTests: XCTestCase {
     XCTAssertTrue(expected == actual[0...2,0...5])
   }
   
+  func testJsonToDataFrameCase3() throws {
+    let testPath = \DailyData.data
+    let expected: DataFrame = ["name" : ["James" , "Oliver" , "Simon"] ,
+                               "age" : [19 , 25, 56] ,
+                               "nationality" : ["British","American","British"],
+                               "yearUpdate" : [2019 , 2019 , 2020]]
+
+    //When
+    let actual: DataFrame = DataFrame.jsonToDataFrame(URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=compact&apikey=U6UPZQI990E8HPDX")!,
+                                                      pathType: .url,
+                                                      model: DailyData.self, keypath: testPath, nesting: .dictionary)
+    //Then
+    print(actual)
+    XCTAssertTrue(expected == actual)
+  }
+  
+  
+  
   func testCSVToDataFrame() throws {
     //Given
     let bundle = Bundle(for: type(of: self))
@@ -223,3 +241,51 @@ private struct PostgreSQLCredentials: Codable {
   let userName: String
   let password: String
 }
+
+struct DailyData: Codable {
+  let metadata: InfoStruct
+  let data: [String: candleData]
+  
+  
+  
+  enum CodingKeys: String, CodingKey {
+    case metadata = "Meta Data"
+    case data = "Time Series (Daily)"
+    
+    
+  }
+}
+
+struct InfoStruct: Codable {
+  let information: String
+  let symbol: String
+  let refresh: String
+  let outputSize: String
+  let timeZone: String
+  
+  enum CodingKeys: String, CodingKey {
+    case information = "1. Information"
+    case symbol = "2. Symbol"
+    case refresh = "3. Last Refreshed"
+    case outputSize = "4. Output Size"
+    case timeZone = "5. Time Zone"
+  }
+}
+
+struct candleData: Codable {
+  let open: String
+  let high: String
+  let low: String
+  let close: String
+  let volume: String
+  
+  enum CodingKeys: String, CodingKey {
+    case open = "1. open"
+    case high = "2. high"
+    case low = "3. low"
+    case close =  "4. close"
+    case volume =  "5. volume"
+  }
+}
+
+
