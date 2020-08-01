@@ -81,7 +81,7 @@ public struct DataFrame: ExpressibleByDictionaryLiteral, CustomStringConvertible
   }
   
   
-  subscript<T>(col: String) -> [T] {
+  public subscript<T>(col: String) -> [T] {
     get {
       var value: [T]
       if let index = columns.firstIndex(where: ({$0.title == col})) {
@@ -97,7 +97,7 @@ public struct DataFrame: ExpressibleByDictionaryLiteral, CustomStringConvertible
   }
   
   
-  subscript(row: Int, col: Int) -> Any {
+  public subscript(row: Int, col: Int) -> Any {
     get {
       return data[columns[col].title]![row]
     }
@@ -107,7 +107,7 @@ public struct DataFrame: ExpressibleByDictionaryLiteral, CustomStringConvertible
   }
   
   //TODO: Have an ability to SLICE with index rather then create new DataFrame
-  subscript(rowRange: ClosedRange<Int>, columnRange: ClosedRange<Int>) -> DataFrame {
+  public subscript(rowRange: ClosedRange<Int>, columnRange: ClosedRange<Int>) -> DataFrame {
     get {
       var newDataFrame: DataFrame = [:]
       newDataFrame.totalRows = rowRange.count
