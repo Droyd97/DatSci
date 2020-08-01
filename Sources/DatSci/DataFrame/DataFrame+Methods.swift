@@ -105,6 +105,50 @@ public extension DataFrame{
     data["index"] =  Array(0...totalRows - 1)
     
   }
+  
+  enum sortOrder {
+    case ascending
+    case descending
+  }
+  
+  mutating func sortValues(by: String, sort: sortOrder = .ascending) {
+    let offset: [Int]
+    if let array = data[by] {
+      switch(sort) {
+      case .ascending:
+        switch(array[0]) {
+        case _ as Int:
+          let arrayInt = array.map({Int($0 as! Int)})
+          offset = arrayInt.enumerated().sorted(by: {$0.element < $1.element}).map({$0.offset})
+        case _ as Double:
+          let arrayDouble = array.map({Double($0 as! Double)})
+          offset = arrayDouble.enumerated().sorted(by: {$0.element < $1.element}).map({$0.offset})
+        case _ as String:
+          let arrayString = array.map({String($0 as! String)})
+          offset = arrayString.enumerated().sorted(by: {$0.element < $1.element}).map({$0.offset})
+        default:
+          fatalError("Failed to sort")
+        }
+      case .descending:
+        switch(array[0]) {
+        case _ as Int:
+          let arrayInt = array.map({Int($0 as! Int)})
+          offset = arrayInt.enumerated().sorted(by: {$0.element > $1.element}).map({$0.offset})
+        case _ as Double:
+          let arrayDouble = array.map({Double($0 as! Double)})
+          offset = arrayDouble.enumerated().sorted(by: {$0.element > $1.element}).map({$0.offset})
+        case _ as String:
+          let arrayString = array.map({String($0 as! String)})
+          offset = arrayString.enumerated().sorted(by: {$0.element > $1.element}).map({$0.offset})
+        default:
+          fatalError("Failed to sort")
+        }
+      }
+      for (key,column) in data {
+        data[key] = offset.map({ column[$0] })
+      }
+    }
+  }
 
 //  func isUnique() -> [String]{
 //    var uniqueArray: [String]
