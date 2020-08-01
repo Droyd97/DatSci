@@ -92,10 +92,11 @@ class dFConversionTests: XCTestCase {
                                "yearUpdate" : [2019 , 2019 , 2020]]
 
     //When
-    let actual: DataFrame = DataFrame.jsonToDataFrame(URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=compact&apikey=U6UPZQI990E8HPDX")!,
+    var actual: DataFrame = DataFrame.jsonToDataFrame(URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=compact&apikey=U6UPZQI990E8HPDX")!,
                                                       pathType: .url,
                                                       model: DailyData.self, keypath: testPath, nesting: .dictionary)
     //Then
+    actual.sortValues(by: "key")
     print(actual)
     XCTAssertTrue(expected == actual)
   }

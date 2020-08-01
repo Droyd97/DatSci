@@ -97,6 +97,15 @@ class dFMethodTests: XCTestCase {
     XCTAssertTrue(expectedDataFrame2 == actualDataFrame)
   }
   
+  func testSortValues() throws {
+    var actualDataFrame: DataFrame = ["name" : ["James" , "Oliver" , "Simon"] ,
+                                        "age" : [56 , 25, 40] ,
+                                        "nationality" : ["British","American","British"],
+                                        "yearUpdate" : [2019 , 2019 , 2020]]
+    actualDataFrame.sortValues(by: "age", sort: .descending)
+    print(actualDataFrame)
+  }
+  
   //  func testIsUnique() throws {
   //    //Given
   //    let testDataFrame: DataFrame = ["name" : ["James" , "Oliver" , "Simon"] ,
