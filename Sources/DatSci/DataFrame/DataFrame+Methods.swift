@@ -152,7 +152,7 @@ public extension DataFrame{
   
   
   mutating func asType(column: String, type: Any.Type) {
-    let currentType = columns[columns.firstIndex(where: ({$0.title == column}))!].dataType
+    //let currentType = columns[columns.firstIndex(where: ({$0.title == column}))!].dataType
     switch type {
     case is Int.Type:
       let _: [Int] = data[column]!.map({(typeConverter($0, convertTo: Int.self)!)})

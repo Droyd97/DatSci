@@ -35,14 +35,16 @@ class dataFrameTests: XCTestCase {
   
   func testSubscriptColumn() throws {
     //Given
-    let testDataFrame: DataFrame = ["name" : ["James" , "Oliver" , "Simon"],
-    "age" : [19 , 25, 56] ,
+    var testDataFrame: DataFrame = ["name" : ["James" , "Oliver" , "Simon"],
+    "age" : ["19" , "25", "56"] ,
     "yearUpdate" : [2019 , 2019 , 2020]]
     let expectedColumn: [String] = ["James","Oliver","Simon"]
     //When
-    let actualColumn: [String] = testDataFrame["name"]
+    testDataFrame.asType(column: "age", type: Int.self)
+    let actualColumn: [Int] = testDataFrame["age"]
+    print(actualColumn)
     //Then
-    XCTAssert(expectedColumn == actualColumn)
+    //XCTAssert(expectedColumn == actualColumn)
   }
   
   // TODO: Complete
