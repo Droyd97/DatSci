@@ -85,7 +85,7 @@ public struct DataFrame: ExpressibleByDictionaryLiteral, CustomStringConvertible
     get {
       var value: [T]
       if let index = columns.firstIndex(where: ({$0.title == col})) {
-        value = data[columns[index].title, default: []].map({typeConverter($0, convertTo: columns[index].dataType)})
+        value = data[columns[index].title, default: []].map({(typeConverter($0, convertTo: columns[index].dataType) ?? fatalError("Cannot convert DataType"))})
       } else {
         value = []
       }

@@ -51,32 +51,82 @@ func realType(_ value: Any) -> Any.Type{
 ///   - value: A value of type Any
 ///   - type: The specified value type that the value is to be converted to.
 /// - Returns: Returns the value as the specified type.
-func typeConverter<T>(_ value: Any, convertTo type: Any.Type) -> T {
+func typeConverter<T>(_ value: Any, convertTo type: Any.Type) -> T? {
+  var newValue: T?
   
-  var newValue: T
-
   switch type {
   case is Int.Type:
-    newValue = value as! T
+    switch value {
+    case let someDouble as Double:
+      newValue = Int(someDouble) as? T
+    case let someInt as Int:
+      newValue = someInt as? T
+    case let someString as String:
+      newValue = Int(someString) as? T
+    default:
+      newValue = Optional.none
+    }
   case is Double.Type:
     switch value {
     case let someDouble as Double:
-      newValue = someDouble as! T
+      newValue = someDouble as? T
     case let someInt as Int:
-      newValue = Double(someInt) as! T
+      newValue = Double(someInt) as? T
+    case let someString as String:
+      newValue = Double(someString) as? T
     default:
-      print("Cannot convert Double")
-      newValue = 0 as! T
+      newValue = Optional.none
     }
   case is String.Type:
-    newValue = value as! T
+    switch value {
+    case let someDouble as Double:
+      newValue = String(someDouble) as? T
+    case let someInt as Int:
+      newValue = String(someInt) as? T
+    case let someString as String:
+      newValue = someString as? T
+    default:
+      newValue = Optional.none
+    }
   case is Bool.Type:
-    newValue = value as! T
+    //TODO: Add Bool Conversion
+    newValue = value as? T
+  //TODO: Add Date type to conversion
   default:
-    print("cannot convert")
-    newValue = 0 as! T
+    newValue = Optional.none
   }
 
   return newValue
 }
+
+//func typeConverter<T>(_ value: Any) -> T {
+//
+//  var newValue: T
+//
+//  switch T.self {
+//  case is Int.Type:
+//    newValue = value as! T
+//  case is Double.Type:
+//    switch value {
+//    case let someDouble as Double:
+//      newValue = someDouble as! T
+//    case let someInt as Int:
+//      newValue = Double(someInt) as! T
+//    case let someString as String:
+//      newValue = Double(someString) as! T
+//    default:
+//      print("Cannot convert Double")
+//      newValue = 0 as! T
+//    }
+//  case is String.Type:
+//    newValue = value as! T
+//  case is Bool.Type:
+//    newValue = value as! T
+//  default:
+//    print("cannot convert")
+//    newValue = 0 as! T
+//  }
+//
+//  return newValue
+//}
 

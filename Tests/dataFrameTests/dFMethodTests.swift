@@ -106,6 +106,18 @@ class dFMethodTests: XCTestCase {
     print(actualDataFrame)
   }
   
+  func testAsType() throws {
+    //Given
+    var actualDataFrame: DataFrame = ["name" : ["James" , "Oliver" , "Simon"] ,
+                                        "age" : ["56" , "25", "40"] ,
+                                        "nationality" : ["British","American","British"],
+                                        "yearUpdate" : [2019 , 2019 , 2020]]
+    //When
+    actualDataFrame.asType(column: "age", type: Int.self)
+    print(actualDataFrame.columns[2])
+    //There
+  }
+  
   //  func testIsUnique() throws {
   //    //Given
   //    let testDataFrame: DataFrame = ["name" : ["James" , "Oliver" , "Simon"] ,

@@ -41,6 +41,7 @@ class HelperFuncTests: XCTestCase {
     //Given
     let dataDouble: [Any] = [5.0,4.0,3.0]
     let dataString: [Any] = ["James", "Oliver", "Simon"]
+    let dataIntString: [String] = ["56","46","34"]
     let dataInt: [Any] = [5,4,3]
     let dataBool: [Any] = [true, false, false]
     
@@ -49,10 +50,12 @@ class HelperFuncTests: XCTestCase {
     let expectedDataInt: [Int] = [5,4,3]
     let expectedDataBool: [Bool] = [true, false, false]
     //When
-    let actualDataDouble: [Double] = dataDouble.map({typeConverter($0, convertTo: Double.self)})
-    let actualDataString: [String] = dataString.map({typeConverter($0, convertTo: String.self)})
-    let actualDataInt: [Int] = dataInt.map({typeConverter($0, convertTo: Int.self)})
-    let actualDataBool: [Bool] = dataBool.map({typeConverter($0, convertTo: Bool.self)})
+    let actualDataDouble: [Double] = dataDouble.map({typeConverter($0, convertTo: Double.self)!})
+    let actualDataString: [String] = dataString.map({typeConverter($0, convertTo: String.self)!})
+    let actualDataInt: [Int] = dataInt.map({typeConverter($0, convertTo: Int.self)!})
+    let actualDataBool: [Bool] = dataBool.map({typeConverter($0, convertTo: Bool.self)!})
+    let stringToInt: [Int] = dataIntString.map({typeConverter($0, convertTo: Int.self)!})
+    print(stringToInt)
     //Then
     XCTAssert(actualDataDouble == expectedDataDouble)
     XCTAssert(actualDataString == expectedDataString)

@@ -149,6 +149,24 @@ public extension DataFrame{
       }
     }
   }
+  
+  
+  mutating func asType(column: String, type: Any.Type) {
+    let currentType = columns[columns.firstIndex(where: ({$0.title == column}))!].dataType
+    switch type {
+    case is Int.Type:
+      let _: [Int] = data[column]!.map({(typeConverter($0, convertTo: Int.self)!)})
+      columns[columns.firstIndex(where: ({$0.title == column}))!].dataType = Int.self
+    case is Double.Type:
+      let _: [Double] = data[column]!.map({typeConverter($0, convertTo: Double.self)!})
+      columns[columns.firstIndex(where: ({$0.title == column}))!].dataType = Double.self
+    case is String.Type:
+      let _: [String] = data[column]!.map({typeConverter($0, convertTo: String.self)!})
+      columns[columns.firstIndex(where: ({$0.title == column}))!].dataType = String.self
+    default:
+      fatalError("Cannot Convert")
+    }
+  }
 
 //  func isUnique() -> [String]{
 //    var uniqueArray: [String]
